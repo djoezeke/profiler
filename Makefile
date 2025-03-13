@@ -18,7 +18,7 @@ FOLDER = ./examples
 all : build run clean
 
 % :
-	@$(CC) $(CCFLAGS) $(FOLDER)/$@.c -I.  -o $@ 
+	@$(CC) $(CCFLAGS) $(CCWARNS) $(FOLDER)/$@.c -I.  -o $@ 
 	@./$@
 
 build:

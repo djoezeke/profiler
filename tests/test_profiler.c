@@ -1,4 +1,4 @@
-#include "../prof.h"
+#include "../profiler.h"
 #include <assert.h>
 
 void test_profiler_initialization()

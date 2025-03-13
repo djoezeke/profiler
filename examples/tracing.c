@@ -23,14 +23,14 @@ void Function1()
 
 void Function2()
 {
-    ProfileTimer *timmer = timer_start();
+    ProfileTimer *timmer = timer_start(__func__);
     sleep(1);
     timer_stop(timmer);
 }
 
 int main()
 {
-    PROFWRITE();
+    PROFWRITE(CHROME);
 
     Function1();
     Function2();

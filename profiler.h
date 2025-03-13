@@ -7,20 +7,6 @@
 // You will probably want to macro-fy this, to switch on/off easily and use things like __FUNCSIG__ for the profile name.
 //
 
-// BeautifulTable info({ "filename", "function", "line","time acc","sd","cv","calls","threads" }, use_color, default_colors);
-// BeautifulTable table({ "min", "mean", "min","mean","med","time a","time ae","max","mean","max" }, use_color, default_colors,
-//     { {"fastest[0-" + std::to_string(settings.non_center_percent) + "]%",2},{"center" + center_intervall_str + "%",6},
-//     {"slowest[" + std::to_string(100 - settings.non_center_percent) + "-100]%",2} });
-
-// ss << "Summary\n";
-// res.get_summary_table(ss, false);
-// ss << "Details\n";
-// res.get_detail_table(ss, false, true);
-
-// BeautifulTable info({ "Start","End","time total","time ctracked","time ctracked %", }, use_color, alternate_colors);
-// BeautifulTable table({ "filename", "function", "line","calls","ae" + center_intervall_str + "%","ae[0-100]%",
-//     "time ae[0-100]" ,"time a[0-100]" }, use_color, alternate_colors);
-
 #ifndef DJOEZEKE_PROFILER_H
 #define DJOEZEKE_PROFILER_H
 
@@ -35,11 +21,6 @@
 #define PROFILER_VERSION_MINOR 1
 #define PROFILER_VERSION_PATCH 0
 
-#define PROFILER_VERSION v##PROFILER_VERSION_MAJOR##.##PROFILER_VERSION_MINOR##.##PROFILER_VERSION_PATCH
-
-#define PROFILER_CONCAT(x, y) x##y
-#define PROFILER_UNIQUE_NAME(prefix) PROFILER_CONCAT(prefix, __COUNTER__)
-
 // #define PROFILIER_DEBUG
 // #define USE_TIMEIT
 // #define USE_START_STOP
@@ -49,6 +30,7 @@
 #define PROFWRITE(x) profiler_enable_write(x)
 
 #define CHROME (1)
+#define LOGGER (2)
 
 #ifdef USE_TIMEIT
 #define TNAME(x) timer_start(x);
@@ -149,9 +131,9 @@
 #endif // TABLE_THEME
 
 static struct Profiler *s_Profiler = NULL;
-static int s_SessionCapacity = 10;
+static size_t s_SessionCapacity = 10;
 static FILE *s_ProfilerFile = NULL;
-static int s_ProfilerWrite = 0;
+static size_t s_ProfilerWrite = 0;
 
 #pragma region STRUCTURES
 
@@ -167,7 +149,7 @@ typedef struct Section
 {
     char *m_Name;
     struct Timedata m_Timming;
-    int m_ProfileCount;
+    size_t m_ProfileCount;
 } Section;
 
 typedef struct ProfileTimer
@@ -189,14 +171,14 @@ typedef struct Profiler
 {
     char *m_Name;
     Section *m_Sessions;
-    int m_SessionCount;
+    size_t m_SessionCount;
 } Profiler;
 
 #pragma endregion // STRUCTURES
 
 #pragma region DECLARATIONS
 
-void profiler_enable_write();
+void profiler_enable_write(int platform);
 void profiler_write(char *name, long start, long end);
 void profiler_write_header();
 void profiler_write_footer();
@@ -238,15 +220,22 @@ void profiler_write(char *name, long start, long end)
     if (s_ProfilerWrite == 0)
         return;
 
-    if (s_ProfilerWrite == 1)
+    if (s_ProfilerWrite == CHROME)
     {
-
         char json[100];
         s_ProfilerFile = fopen("Profiler.json", "a+");
-        sprintf(json, "{\"cat\":\"function\",\"dur\" :%d,\"name\": \"%s\",\"ph\":\"X\",\"pid\": 0,\"tid\":%d,\"ts\":%d},", end - start, name, 1.0, start);
+        sprintf(json, "{\"cat\":\"function\",\"dur\" :%ld,\"name\": \"%s\",\"ph\":\"X\",\"pid\": 0,\"tid\":%f,\"ts\":%ld},", end - start, name, 1.0, start);
         fwrite(json, strlen(json), 1, s_ProfilerFile);
         fflush(s_ProfilerFile);
         fclose(s_ProfilerFile);
+        return;
+    }
+
+    if (s_ProfilerWrite == LOGGER)
+    {
+        s_ProfilerFile = fopen("Logger.log", "a+");
+        fclose(s_ProfilerFile);
+        return;
     }
 };
 
@@ -263,6 +252,7 @@ void profiler_write_header()
         fflush(s_ProfilerFile);
 
         fclose(s_ProfilerFile);
+        return;
     }
 };
 
