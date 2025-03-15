@@ -13,13 +13,8 @@
 ## Basic Usage
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
 #define USE_START_STOP
 #define USE_TIMEIT
-
 #include "../profiler.h"
 
 void Function()
@@ -33,8 +28,8 @@ void Function1()
 {
     START();
     Function1();
-Function1();
-Function1();
+    Function1();
+    Function1();
     STOP();
 }
 
@@ -53,6 +48,6 @@ int main()
     Function2();
 
     PROFILE();
-
     return 0;
-}```
+}
+```
