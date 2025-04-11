@@ -1,27 +1,23 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
-
-#define USE_START_STOP
-#define USE_TIMEIT
 
 #include "../cprofiler.h"
 
-void Function(Profiler *prof)
+void Function(Profiler &prof)
 {
     START(prof);
     usleep(200);
     STOP(prof);
 }
 
-void Function1(Profiler *prof)
+void Function1(Profiler &prof)
 {
     START(prof);
     sleep(1);
     STOP(prof);
 }
 
-void Function2(Profiler *prof)
+void Function2(Profiler &prof)
 {
     START(prof);
     sleep(1);
@@ -30,14 +26,23 @@ void Function2(Profiler *prof)
 
 int main()
 {
-    Profiler *prof = newProfiler("Profiler");
+    Profiler prof = Profiler("Profiler");
 
     Function1(prof);
     Function2(prof);
     Function2(prof);
 
-    prof->Profile(prof);
+    Profiler proff = Profiler("Profiler");
 
-    freeProfiler(prof);
+    Function1(proff);
+    Function2(proff);
+    Function2(proff);
+
+    prof.Profile();
+
+    printf("\n");
+
+    proff.Profile();
+
     return 0;
 }
