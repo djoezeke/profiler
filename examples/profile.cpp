@@ -3,46 +3,36 @@
 
 #include "../cprofiler.h"
 
-void Function(Profiler &prof)
+void Function(Profiler &profiler)
 {
-    START(prof);
+    START(profiler);
     usleep(200);
-    STOP(prof);
+    STOP(profiler);
 }
 
-void Function1(Profiler &prof)
+void Function1(Profiler &profiler)
 {
-    START(prof);
+    START(profiler);
     sleep(1);
-    STOP(prof);
+    STOP(profiler);
 }
 
-void Function2(Profiler &prof)
+void Function2(Profiler &profiler)
 {
-    START(prof);
+    START(profiler);
     sleep(1);
-    STOP(prof);
+    STOP(profiler);
 }
 
 int main()
 {
-    Profiler prof = Profiler("Profiler");
+    Profiler profiler = Profiler("Profiler");
 
-    Function1(prof);
-    Function2(prof);
-    Function2(prof);
+    Function1(profiler);
+    Function2(profiler);
+    Function2(profiler);
 
-    Profiler proff = Profiler("Profiler");
-
-    Function1(proff);
-    Function2(proff);
-    Function2(proff);
-
-    prof.Profile();
-
-    printf("\n");
-
-    proff.Profile();
+    PROFILE(profiler);
 
     return 0;
 }

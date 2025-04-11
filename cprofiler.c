@@ -302,6 +302,16 @@ Profiler::Profiler(const char *name)
     m_timmer = NULL;
 };
 
+Profiler::Profiler(std::string name)
+{
+    Profiler(name.c_str());
+};
+
+void Profiler::Start(std::string name)
+{
+    Start(name.c_str());
+}
+
 void Profiler::Start(const char *name)
 {
     m_timmer = (ProfileTimer_t *)malloc(sizeof(ProfileTimer_t));

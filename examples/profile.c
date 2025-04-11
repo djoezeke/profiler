@@ -2,9 +2,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define USE_START_STOP
-#define USE_TIMEIT
-
 #include "../cprofiler.h"
 
 void Function(Profiler *prof)

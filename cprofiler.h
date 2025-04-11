@@ -135,6 +135,8 @@ typedef struct Profiler_t
 
 #ifdef __cplusplus
 
+#include <string>
+
 #define START(profiler) profiler.Start(__func__)
 #define STOP(profiler) profiler.Stop()
 #define PROFILE(profiler) profiler.Profile()
@@ -143,7 +145,9 @@ class Profiler
 {
 public:
     Profiler(const char *name);
+    Profiler(std::string name);
 
+    void Start(std::string name);
     void Start(const char *name);
     void Stop();
     void Profile();
@@ -176,6 +180,7 @@ struct Profiler
 #endif // __cplusplus
 
 #ifdef __cplusplus
+
 extern "C"
 {
 #endif // __cplusplus
