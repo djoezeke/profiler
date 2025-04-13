@@ -177,24 +177,14 @@ struct Profiler
     void (*Profile)(Profiler *);
 };
 
-#endif // __cplusplus
+Profiler *newProfiler(const char *);
 
-#ifdef __cplusplus
+void Start(Profiler *, const char *);
+void Stop(Profiler *);
+void Profile(Profiler *);
 
-extern "C"
-{
-#endif // __cplusplus
+void freeProfiler(Profiler *);
 
-    Profiler *newProfiler(const char *);
-
-    void Start(Profiler *, const char *);
-    void Stop(Profiler *);
-    void Profile(Profiler *);
-
-    void freeProfiler(Profiler *);
-
-#ifdef __cplusplus
-}
 #endif // __cplusplus
 
 #endif // PROFILER_H
