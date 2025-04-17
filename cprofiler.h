@@ -1,5 +1,7 @@
 /* For by both C and C++ compilers */
 
+#ifndef PROFILER_H
+
 /** @file cprofiler.h
  *  This is a Standard C++ Library file.  You should @c \#include this file
  *  in your programs, for all compilers C or C++.
@@ -8,14 +10,13 @@
  *
  */
 
-#ifndef PROFILER_H
 #define PROFILER_H
 
+/* All the headers include this file. */
 #include <string.h>
-#include <stdio.h>
-#include <stdint.h>
+// #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
+// #include <stdbool.h>
 #include <time.h>
 
 // #define PROFILIER_DEBUG
@@ -118,7 +119,7 @@ typedef struct ProfileTimer_t
 typedef struct ProfileResult_t
 {
     char *m_Name;
-    uint32_t m_ThreadID;
+    unsigned int m_ThreadID;
     clock_t m_Start;
     clock_t m_End;
 
@@ -165,17 +166,15 @@ private:
 #define STOP(profiler) profiler->Stop(profiler)
 #define PROFILE(profiler) profiler->Profile(profiler)
 
-typedef struct Profiler Profiler;
-
-struct Profiler
+typedef struct Profiler
 {
     Profiler_t *m_profiler;
     ProfileTimer_t *m_timmer;
 
-    void (*Start)(Profiler *, const char *);
-    void (*Stop)(Profiler *);
-    void (*Profile)(Profiler *);
-};
+    void (*Start)(struct Profiler *, const char *);
+    void (*Stop)(struct Profiler *);
+    void (*Profile)(struct Profiler *);
+} Profiler;
 
 Profiler *newProfiler(const char *);
 
