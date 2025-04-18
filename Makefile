@@ -4,10 +4,14 @@
 # Usage :
 #		make sample
 #		make clean
+#		make static/lib
+#		make dynamic/dll
 
 CC = gcc
 CCFLAGS = -Wall -Wextra -std=c23 -Wformat -Wempty-body
 CCWARNS = -Wunused-function -Wempty-body -Wunused-variable
+STATIC =  -c -o cprof.lib
+DYNAMIC= -shared -o cprof.dll
 
 # Comment/Uncomment to run examples/tests
 FOLDER = ./examples
@@ -15,14 +19,19 @@ FOLDER = ./examples
 # Comment/Uncomment to run examples/tests
 # FOLDER = ./tests
 
-all : build run clean
+all : static dynamic
+lib : static 
+dll : dynamic
 
 % :
-	@$(CC) $(CCFLAGS) $(CCWARNS) $(FOLDER)/$@.c -I.  -o $@ 
+	@$(CC) $(CCFLAGS) $(CCWARNS) $(FOLDER)/$@.c  cprofiler.c -I.  -o $@ 
 	@./$@
 
-build:
-	$(CC) $(CCFLAGS) $(FOLDER)/sample.c  I.
+static:
+	$(CC) $(CCFLAGS) cprofiler.c $(STATIC)
+
+dynamic:
+	$(CC) $(CCFLAGS) cprofiler.c $(DYNAMIC)
 
 run:
 	@./a
@@ -31,6 +40,7 @@ clean:
 	@rm -f ./*.o
 	@rm -f ./*.exe
 
+.Phony : all clean
 
 # ZZZZZZZZZZZZZZZZZZZ  EEEEEEEEEEEEEEEEEEEEEE  KKKKKKKKK    KKKKKKK  EEEEEEEEEEEEEEEEEEEEEE
 # Z:::::::::::::::::Z  E::::::::::::::::::::E  K:::::::K    K:::::K  E::::::::::::::::::::E

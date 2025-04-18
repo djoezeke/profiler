@@ -7,6 +7,10 @@
 // You will probably want to macro-fy this, to switch on/off easily and use things like __FUNCSIG__ for the profile name.
 //
 
+/* All the headers include this file. */
+#include <stdio.h>
+#include <stdbool.h>
+
 #include "cprofiler.h"
 
 #pragma region FUNCTIONS
@@ -81,7 +85,7 @@ extern "C"
     ProfileSection_t init_ProfileSection_t(char *name);
     void free_ProfileSection_t(ProfileSection_t *section);
 
-    ProfileResult_t init_ProfileResult_t(char *name, clock_t start, clock_t end, uint32_t threadid);
+    ProfileResult_t init_ProfileResult_t(char *name, clock_t start, clock_t end, unsigned int threadid);
     void free_ProfileResult_t(ProfileResult_t *res);
 
     void Profiler_add_result(Profiler_t *profiler, ProfileResult_t *result);
@@ -182,7 +186,7 @@ extern "C"
         }
     }
 
-    ProfileResult_t init_ProfileResult_t(char *name, clock_t start, clock_t end, uint32_t threadid)
+    ProfileResult_t init_ProfileResult_t(char *name, clock_t start, clock_t end, unsigned int threadid)
     {
         ProfileResult_t res;
         res.m_Name = strdup(name);
@@ -261,7 +265,7 @@ extern "C"
     void print_table_row(char *section, size_t count, double min, double max, double avg, double sum)
     {
         char row[2048];
-        snprintf(row, 2048, TC "| " NC "%20s" TC "| " NC "%12.4f" TC " | " NC "%12.4f" TC " | " NC "%12.4f" TC " | " NC "%12.4f" TC " | " NC "  %6d" TC "  |" NC, section, min, max, avg, sum, count);
+        snprintf(row, 2048, TC "| " NC "%20s" TC "| " NC "%12.4f" TC " | " NC "%12.4f" TC " | " NC "%12.4f" TC " | " NC "%12.4f" TC " | " NC "  %6lld" TC "  |" NC, section, min, max, avg, sum, count);
         printf("%s\n", row);
         printf(TC "-----------------------------------------------------------------------------------------------\n" NC);
     }
@@ -361,6 +365,7 @@ void Profiler::Profile()
         return;
     }
 
+    printf("%s\n", profiler->m_profiler->m_Name);
     print_table(m_profiler);
 };
 
@@ -425,7 +430,7 @@ void Profile(Profiler *profiler)
 #endif // PROFILIER_DEBUG
         return;
     }
-
+    printf("%s\n", profiler->m_profiler->m_Name);
     print_table(profiler->m_profiler);
 };
 
