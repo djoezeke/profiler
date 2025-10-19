@@ -8,10 +8,10 @@
 //
 
 /* All the headers include this file. */
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 
-#include "cprofiler.h"
+#include "profiler.h"
 
 #pragma region FUNCTIONS
 

@@ -1,6 +1,6 @@
+#include "../profiler.h"
 #include <stdio.h>
 #include <unistd.h>
-#include "../cprofiler.h"
 
 void Function(Profiler &profiler)
 {

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "../cprofiler.h"
+#include "../profiler.h"
 
 void Function(Profiler *prof)
 {
